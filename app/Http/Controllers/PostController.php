@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -18,29 +20,47 @@ class PostController extends Controller
         else redirect('/login');
     }
     public function show(Post $post){
+        
         return view('posts.show', ['post' => $post]);
     }
     public function showUserPosts(){
         if(Auth::guest()){
             return redirect('/login');
         }else{
-            $posts = Auth::user()->posts()->with('user')->latest()->simplePaginate(6);
+            $posts = Auth::user()->posts()->with('user','tags')->latest()->simplePaginate(6);
         }
         return view('posts.userPosts',['posts'=>$posts]);
 
     }
-    public function store(){
-        request()->validate([
+    public function store(Request $request){
+        $request->validate([
             'title' => ['required'],
-            'text' => 'required'
+            'text' => 'required',
+            'tags' => 'nullable|string' 
         ]);
-
-        Post::create([
-            'title' => request('title'),
-            'text' => request('text'),
-            'user_id' => Auth::user()->id,
-            // 'user_id' => Auth::id(),
+    
+        $post = Post::create([
+            'title' => $request->input('title'),
+            'text' => $request->input('text'),
+            'user_id' => Auth::id(),
         ]);
+    
+        if ($request->filled('tags')) {
+            $tagNames = explode(',', $request->input('tags')); 
+            $tagIds = [];
+    
+            foreach ($tagNames as $tagName) {
+                $tagName = trim($tagName);
+                if (!empty($tagName)) {
+                    $tag = Tag::firstOrCreate(['name' => Str::lower($tagName)]);
+                    $tagIds[] = $tag->id;
+                }
+            }
+    
+            // Attach tags to the post
+            $post->tags()->sync($tagIds);
+        }
+    
         return redirect('/posts');
     }
     public function edit(Post $post){
@@ -58,7 +78,8 @@ class PostController extends Controller
         //validate
         request()->validate([
             'title' => ['required'],
-            'text' => 'required'
+            'text' => 'required',
+            'tags' => 'nullable|string' 
         ]);
         //update
         // $post = Post::findOrFail($id);
@@ -68,6 +89,22 @@ class PostController extends Controller
             'title' => request('title'),
             'text' => request('text'),
         ]);
+        if (request()->has('tags')) {
+            $tagNames = explode(',', request('tags')); // Convert string to array
+            $tagIds = [];
+    
+            foreach ($tagNames as $tagName) {
+                $tagName = trim($tagName);
+                if (!$tagName) continue;
+    
+                // Find or create tag
+                $tag = \App\Models\Tag::firstOrCreate(['name' => $tagName]);
+                $tagIds[] = $tag->id;
+            }
+    
+            // Sync tags with the post
+            $post->tags()->sync($tagIds);
+        }
         // choice tow
         // $post->title = request('title');
         // $post->text =request('text');

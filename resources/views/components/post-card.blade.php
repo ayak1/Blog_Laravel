@@ -5,7 +5,11 @@
             <div class="flex items-center gap-x-4">
                 <time class="text-gray-500">{{$post['created_at']->format('M  d/Y')}}</time>
                 <!-- tags -->
-                <p class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 ">Marketing</ح>
+                <div class="flex items-center justify-center gap-[1px]">
+                @foreach($post->tags as $tag)
+                <p class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 ">{{$tag->name}}</p>
+                @endforeach
+                </div>
                 <!-- /// -->
             </div>
         </div>

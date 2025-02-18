@@ -1,6 +1,7 @@
 <x-layout>
 <form method="POST" action="/posts">
   @csrf
+  
   <div class="flex flex-col border-b border-gray-900/10 pb-12">
   
       <div>
@@ -18,7 +19,11 @@
           <input name="text" id="about" rows="3" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" placeholder="click here..."></input>
         </div>
       </div>
-      
+      <div>
+    <label for="tags" class="block text-sm font-medium text-gray-900">Tags (comma-separated)</label>
+    <input type="text" name="tags" id="tags" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-gray-300 placeholder-gray-400 focus:outline-blue-600 sm:text-sm" placeholder="e.g., Laravel, PHP, Backend">
+</div>
+
       <!-- @error('title')
         {{$message}}
       @enderror

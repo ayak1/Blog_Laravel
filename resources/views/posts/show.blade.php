@@ -21,8 +21,11 @@
             <div class="lg:pr-4">
                 <div class="w-full">
                     <!-- tags here -->
-                    <p class="text-base/7 font-semibold text-indigo-600">Deploy faster</p>
-                    <!-- //// -->
+                    <div class="flex items-center justify-center gap-[1px]">
+                        @foreach($post->tags as $tag)
+                        <p class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 ">{{$tag->name}}</p>
+                        @endforeach
+                    </div>                    <!-- //// -->
                     <h1 class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">{{$post['title']}}</h1>
                     <p class="mt-6 text-xl/8 text-gray-700">{{$post['text']}}</p>
                     <div class="flex justify-between items-center pt-5 text-blue-500 font-medium">
