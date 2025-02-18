@@ -33,7 +33,12 @@
             </div>
             </div>
         </div>
-        <a href="/posts/{{$post->id}}/edit">edit</a>
+
+        
+        @if(!Auth::guest() && Auth::user()->id==$post['user_id'] )
+            <a href="/posts/{{$post->id}}/edit">edit</a>
+        @endif
+
         <div class="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
             @foreach ($post->user->posts as $post_extra)
                 @if ($post_extra['id']!==$post['id'])

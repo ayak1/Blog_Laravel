@@ -10,7 +10,9 @@
             <x-post-card :post="$post" />  
         @endforeach
     </div>
-    {{$posts->links()}}
+    <div class="pt-4">
+      {{$posts->links()}}
+    </div>
     
   </div>
 </div>

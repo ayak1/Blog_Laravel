@@ -12,17 +12,21 @@
         <ul class="mx-auto max-w-7xl p-6 flex items-center gap-4 container">
             <li><a class="text-white" href="/">home</a></li>
             <li><a class="text-white" href="/posts">posts</a></li>
-            <li><a href="/posts/create" class="bg-white text-black p-2 rounded rounded-lg">add post</a></li>
+            <li><a class="text-white" href="/my_posts">my posts</a></li>
+            @can('create-post')
+            <li><a class="text-white" href="/posts/create">create</a></li>
+            @endcan
             @guest
+            <li><a href="/login" class="bg-white text-black p-2 rounded rounded-lg">add post</a></li>
             <li><a href="/register" class="bg-white text-black p-2 rounded rounded-lg">register</a></li>
             <li><a href="/login" class="bg-white text-black p-2 rounded rounded-lg">login</a></li>
+            @else
+            <li><a href="/posts/create" class="bg-white text-black p-2 rounded rounded-lg">add post </a></li>
+            <form action="/logout" method="POST">
+               @csrf
+               <button type="submit"  class="bg-white text-black p-2 rounded rounded-lg">logout</button>
+            </form>
             @endguest
-            @auth
-                <form action="/logout" method="POST">
-                   @csrf
-                   <button type="submit"  class="bg-white text-black p-2 rounded rounded-lg">logout</button>
-                </form>
-            @endauth
         </ul>
     </nav>
     <div class="mx-auto max-w-7xl py-24">

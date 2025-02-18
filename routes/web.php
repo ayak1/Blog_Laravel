@@ -3,6 +3,8 @@
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterUserController;
 use App\Http\Controllers\SessionController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -18,13 +20,22 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('home');
 // });
+
+
 Route::view('/','home');
-Route::resource('posts',PostController::class);
+Route::get('/posts',[PostController::class,'index']);
+Route::get('/posts/create',[PostController::class,'create'])->middleware('auth','can:create-post');
+Route::post('/posts',[PostController::class,'store']);
+Route::get('/posts/{post}',[PostController::class,'show']);
+Route::get('/posts/{post}/edit',[PostController::class,'edit'])->middleware('auth');
+Route::patch('/posts/{post}',[PostController::class,'update']);
+Route::delete('/posts/{post}',[PostController::class,'destroy']);
+Route::get('/my_posts',[PostController::class,'showUserPosts']);
 
 Route::get('/register',[RegisterUserController::class,'create']);
 Route::post('/register',[RegisterUserController::class,'store']);
 
-Route::get('/login',[SessionController::class,'create']);
+Route::get('/login',[SessionController::class,'create'])->name('login');
 Route::post('/login',[SessionController::class,'store']);
 Route::post('/logout',[SessionController::class,'destroy']);
 
