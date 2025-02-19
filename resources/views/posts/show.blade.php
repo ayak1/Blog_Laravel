@@ -26,11 +26,11 @@
                         <p class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 ">{{$tag->name}}</p>
                         @endforeach
                     </div>                    <!-- //// -->
-                    <h1 class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">{{$post['title']}}</h1>
-                    <p class="mt-6 text-xl/8 text-gray-700">{{$post['text']}}</p>
+                    <h1 class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">{{$post->title}}</h1>
+                    <p class="mt-6 text-xl/8 text-gray-700">{{$post->text}}</p>
                     <div class="flex justify-between items-center pt-5 text-blue-500 font-medium">
-                        <p class="">by: {{$post->user['name']}}</p>
-                        <time class="">{{$post['created_at']->format('M  d/Y')}}</time>
+                        <p class="">by: {{$post->user->name}}</p>
+                        <time class="">{{$post->created_at->format('M  d/Y')}}</time>
                     </div>
                 </div>
             </div>
@@ -38,14 +38,15 @@
         </div>
 
         
-        @if(!Auth::guest() && Auth::user()->id==$post['user_id'] )
+        @if(!Auth::guest() && Auth::user()->id==$post->user_id )
             <a href="/posts/{{$post->id}}/edit">edit</a>
         @endif
 
         <div class="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            @foreach ($post->user->posts as $post_extra)
-                @if ($post_extra['id']!==$post['id'])
-                    <x-post-card :post="$post" />  
+        @foreach ($post->user->posts as $post_extra)
+                
+                @if ($post_extra->id !== $post['id'])
+                    <x-post-card :post="$post_extra" />  
                 @endif
             @endforeach
         </div>

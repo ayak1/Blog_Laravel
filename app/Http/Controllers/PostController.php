@@ -19,8 +19,8 @@ class PostController extends Controller
         return view('posts.create');
         else redirect('/login');
     }
-    public function show(Post $post){
-        
+    public function show($id){
+        $post = Post::with('user', 'tags','user.posts','user.posts.user' ,'user.posts.tags')->findOrFail($id);
         return view('posts.show', ['post' => $post]);
     }
     public function showUserPosts(){
